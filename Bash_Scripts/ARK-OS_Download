@@ -1,0 +1,103 @@
+#!/bin/bash
+# Script to download files
+
+cd ..
+status=1
+while [ $status -le 2]
+do
+	echo -e "Do you want to download from a torrent file or a magnet link?"
+	read magtor
+	if [ "$magtor" == "torrent file" ] || [ "$magtor" == "file" ] || [ "$magtor" == "Torrent File" ] || [ "$magtor" == "File" ]
+        then
+
+                echo -e "Alright! Downloading from a torrent file."
+		tstatus=1
+		while [ $tstatus -le 2]
+		do
+	                echo -e "Place the torrent file into the Torrent_Files folder now. Press ENTER when ready"
+			read enter
+			file_count=$(ls Torrent_Files | wc -l)
+			if [ $filecount == 1 ]
+			then
+				magnet=$(ls Torrent_Files)
+				cd ARK-OS
+				transmission-cli $magnet
+				cd ..
+				rm -rf ToFlash
+	        	        mkdir ToFlash
+       		 	        cd ToFlash
+           			touch $magnet
+               			$tstatus=10
+			fi
+			if (( "$filecount" > "1" ))
+			then
+				let fileNum=0
+				arr=()
+				for entry in `ls Torrent_Files`
+				do
+				        let fileNum++
+				        arr[fileNum]=$entry
+				        echo $fileNum ${arr[$fileNum]}
+				done
+                		echo -e "Which file do you want to use?"
+				read filePick
+				echo -e "You have picked ${arr[$filePick]} to torrent."
+				cd ARK-OS
+                                transmission-cli ${arr[$filePick]}
+				cd ..
+				rm -rf ToFlash
+	        	        mkdir ToFlash
+       		 	        cd ToFlash
+           			touch ${arr[$filePick]}
+				$tstatus=10
+			fi
+		done
+		$status=10
+        fi
+	if [ "$magtor" == "magnet link" ] || [ "$magtor" == "magnet" ] || [ "$magtor" == "link" ] || [ "$magtor" == "Magnet Link" ]
+        then
+		echo -e "Alright! Downloading from a magnet link."
+		echo -e "Please paste the magnet link and hit ENTER."
+		read maglink
+		cd ARK-OS
+		transmission-cli $maglink
+		ARKfile_count=$(ls | wc -l)
+		if (( "$ARKfilecount" = "1" ))
+		then
+			cd ..
+			arr=()
+			let fileNum=0
+                        for entry in `ls ARK-OS`
+                        do
+                                let fileNum++
+                                arr[fileNum]=$entry
+                                #echo $fileNum ${arr[$fileNum]}
+                        done
+	                rm -rf ToFlash
+        	        mkdir ToFlash
+            		cd ToFlash
+			touch ${arr[0]}
+		fi
+		if (( "$ARKfilecount" = "1" ))
+                then
+                        let fileNum=0
+                        arr=()
+			cd ..
+                        for entry in `ls ARK-OS`
+                        do
+                                let fileNum++
+                                arr[fileNum]=$entry
+                                echo $fileNum ${arr[$fileNum]}
+                        done
+                        echo -e "Which file do you want to flash?"
+                        read filePick
+                        echo -e "You have picked ${arr[$filePick]} to flash."
+                        rm -rf ToFlash
+                        mkdir ToFlash
+                        cd ToFlash
+                        touch ${arr[$filePick]}
+
+                fi
+
+	fi
+done

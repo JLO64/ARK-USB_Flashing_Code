@@ -1,0 +1,32 @@
+#!/bin/bash
+# Script to combine bash scripts
+
+status=1
+
+CURRENTDIR=$(pwd)
+
+cd Bash_Scripts
+./ARK-OS_Read
+
+while [ $status -le 2 ]
+do
+
+	echo -e "Are you upgrading a hard drive that already has ARK-OS on it? Type yes or no..."
+	read yesno
+
+	if [ "$yesno" == "yes" ] || [ "$yesno" == "y" ] || [ "$yesno" == "Y" ]
+	then
+		
+		echo -e "Alright! Backing up files..."
+		./ARK-OS_Backup && ./ARK-OS_Flashing && ./ ARK-OS_Restoring
+		$status=10
+	fi
+
+	if [ "$yesno" == "no" ] || [ "$yesno" == "n" ] || [ "$yesno" == "N" ]
+	then
+		
+		echo -e "Alright! Deleting EVERYTHING..."
+		./ARK-OS_Flashing
+		$status=10
+	fi
+done

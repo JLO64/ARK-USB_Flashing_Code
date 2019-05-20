@@ -1,0 +1,44 @@
+#!/bin/bash
+# Script to backup files for upgrade
+
+echo -e "Please enter the location to search in: "
+read part
+
+CURRENTDIR=$(pwd)
+PARTHOMEDIR=$part/home/user
+cd ..
+echo -e "Creating folder for backup"
+mkdir BackupData
+
+BACKUP=BackupData
+
+echo -e "Copying items in the Desktop folder"
+cp -rfv $PARTHOMEDIR/Desktop $BACKUP
+
+echo -e "Copying items in the Pictures folder"
+cp -rfv $PARTHOMEDIR/Pictures $BACKUP
+
+echo -e "Copying items in the Videos folder"
+cp -rfv $PARTHOMEDIR/Videos $BACKUP
+
+echo -e "Copying items in the Music folder"
+cp -rfv $PARTHOMEDIR/Music $BACKUP
+
+echo -e "Copying items in the Downloads folder"
+cp -rfv $PARTHOMEDIR/Downloads $BACKUP
+
+echo -e "Copying items in the Documents folder"
+cp -rfv $PARTHOMEDIR/Documents $BACKUP
+
+echo -e "Copying items in the Public folder"
+cp -rfv $PARTHOMEDIR/Public $BACKUP
+
+echo -e "Copying items in the Templates folder"
+cp -rfv $PARTHOMEDIR/Templates $BACKUP
+
+echo -e "Copying Firefox data"
+cp -rfv $PARTHOMEDIR/.mozilla/firefox/*.default* $BACKUP
+
+echo -e "Done copying data"
+
+sleep 5s
